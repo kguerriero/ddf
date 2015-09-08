@@ -13,45 +13,18 @@
  */
 package ddf.catalog.source.solr;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.collection.IsCollectionContaining.hasItem;
-import static org.hamcrest.number.OrderingComparisons.greaterThanOrEqualTo;
-import static org.hamcrest.number.OrderingComparisons.lessThanOrEqualTo;
-import static org.hamcrest.text.StringContains.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.beans.XMLEncoder;
-import java.io.BufferedOutputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TimeZone;
-import java.util.TreeSet;
-import java.util.UUID;
-
-import javax.swing.border.BevelBorder;
-
+import ddf.catalog.data.AttributeDescriptor;
+import ddf.catalog.data.ContentType;
+import ddf.catalog.data.Metacard;
+import ddf.catalog.data.Result;
+import ddf.catalog.data.impl.*;
+import ddf.catalog.operation.*;
+import ddf.catalog.operation.impl.DeleteRequestImpl;
+import ddf.catalog.operation.impl.QueryImpl;
+import ddf.catalog.operation.impl.QueryRequestImpl;
+import ddf.catalog.operation.impl.UpdateRequestImpl;
+import ddf.catalog.source.IngestException;
+import ddf.catalog.source.UnsupportedQueryException;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.codice.solr.factory.ConfigurationStore;
 import org.geotools.filter.FilterFactoryImpl;
@@ -74,31 +47,28 @@ import org.opengis.filter.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ddf.catalog.data.AttributeDescriptor;
-import ddf.catalog.data.ContentType;
-import ddf.catalog.data.Metacard;
-import ddf.catalog.data.Result;
-import ddf.catalog.data.impl.AttributeDescriptorImpl;
-import ddf.catalog.data.impl.BasicTypes;
-import ddf.catalog.data.impl.ContentTypeImpl;
-import ddf.catalog.data.impl.MetacardImpl;
-import ddf.catalog.data.impl.MetacardTypeImpl;
-import ddf.catalog.operation.CreateRequest;
-import ddf.catalog.operation.CreateResponse;
-import ddf.catalog.operation.DeleteRequest;
-import ddf.catalog.operation.DeleteResponse;
-import ddf.catalog.operation.Query;
-import ddf.catalog.operation.QueryRequest;
-import ddf.catalog.operation.SourceResponse;
-import ddf.catalog.operation.Update;
-import ddf.catalog.operation.UpdateRequest;
-import ddf.catalog.operation.UpdateResponse;
-import ddf.catalog.operation.impl.DeleteRequestImpl;
-import ddf.catalog.operation.impl.QueryImpl;
-import ddf.catalog.operation.impl.QueryRequestImpl;
-import ddf.catalog.operation.impl.UpdateRequestImpl;
-import ddf.catalog.source.IngestException;
-import ddf.catalog.source.UnsupportedQueryException;
+import javax.swing.border.BevelBorder;
+import java.beans.XMLEncoder;
+import java.io.BufferedOutputStream;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
+import java.util.Map.Entry;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.Assert.*;
 
 /**
  * Tests the {@link ddf.catalog.source.solr.SolrCatalogProvider}.
@@ -1318,7 +1288,8 @@ public class TestSolrProvider extends SolrProviderTestCase {
         assertThat(deletedMetacards.size(), is(metacards.size()));
 
         for (int i = 0; i < metacardCount; i++) {
-            assertThat(ids.contains(deletedMetacards.get(i).getId()), is(true));
+            //assertThat(ids.contains(deletedMetacards.get(i).getId()), is(true));
+            Assert.assertThat(ids, contains(deletedMetacards.get(i).getId()));
         }
     }
 
